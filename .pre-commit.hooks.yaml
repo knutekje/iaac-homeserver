@@ -1,0 +1,160 @@
+- id: infracost_breakdown
+  name: Infracost breakdown
+  description: Check OpenTofu infrastructure cost
+  entry: hooks/infracost_breakdown.sh
+  language: script
+  require_serial: true
+  files: \.((tf|tofu)(vars)?|hcl)$
+  exclude: \.terraform\/.*$
+
+- id: tofu_fmt
+  name: OpenTofu fmt
+  description: Rewrites all OpenTofu configuration files to a canonical format.
+  entry: hooks/tofu_fmt.sh
+  language: script
+  files: \.(tf|tofu)(vars)?$
+  exclude: \.terraform\/.*$
+
+- id: tofu_docs
+  name: OpenTofu docs
+  description:
+    Inserts input and output documentation into README.md (using
+    terraform-docs).
+  require_serial: true
+  entry: hooks/tofu_docs.sh
+  language: script
+  files: (\.(tf|tofu)|\.terraform\.lock\.hcl)$
+  exclude: \.terraform\/.*$
+
+- id: tofu_docs_without_aggregate_type_defaults
+  name: OpenTofu docs (without aggregate type defaults)
+  description:
+    Inserts input and output documentation into README.md (using
+    terraform-docs). Identical to terraform_docs.
+  require_serial: true
+  entry: hooks/tofu_docs.sh
+  language: script
+  files: \.(tf|tofu)$
+  exclude: \.terraform\/.*$
+
+- id: tofu_docs_replace
+  name: OpenTofu docs (overwrite README.md)
+  description: Overwrite content of README.md with terraform-docs.
+  require_serial: true
+  entry: hooks/tofu_docs_replace.py
+  language: python
+  files: \.(tf|tofu)$
+  exclude: \.terraform\/.*$
+
+- id: tofu_validate
+  name: OpenTofu validate
+  description: Validates all OpenTofu configuration files.
+  require_serial: true
+  entry: hooks/tofu_validate.sh
+  language: script
+  files: \.(tf|tofu)(vars)?$
+  exclude: \.terraform\/.*$
+
+- id: tofu_providers_lock
+  name: Lock OpenTofu provider versions
+  description: Updates provider signatures in dependency lock files.
+  require_serial: true
+  entry: hooks/tofu_providers_lock.sh
+  language: script
+  files: (\.terraform\.lock\.hcl)$
+  exclude: \.terraform\/.*$
+
+- id: tofu_tflint
+  name: OpenTofu validate with tflint
+  description: Validates all OpenTofu configuration files with TFLint.
+  require_serial: true
+  entry: hooks/tofu_tflint.sh
+  language: script
+  files: \.(tf|tofu)(vars)?$
+  exclude: \.terraform\/.*$
+
+- id: terragrunt_fmt
+  name: Terragrunt fmt
+  description:
+    Rewrites all Terragrunt configuration files to a canonical format.
+  entry: hooks/terragrunt_fmt.sh
+  language: script
+  files: (\.hcl)$
+  exclude: \.terraform\/.*$
+
+- id: terragrunt_validate
+  name: Terragrunt validate
+  description: Validates all Terragrunt configuration files.
+  entry: hooks/terragrunt_validate.sh
+  language: script
+  files: (\.hcl)$
+  exclude: \.terraform\/.*$
+
+- id: tofu_tfsec
+  name: OpenTofu validate with tfsec (deprecated, use "tofu_trivy")
+  description:
+    Static analysis of OpenTofu templates to spot potential security issues.
+  require_serial: true
+  entry: hooks/tofu_tfsec.sh
+  files: \.(tf|tofu)(vars)?$
+  language: script
+
+- id: tofu_trivy
+  name: OpenTofu validate with trivy
+  description:
+    Static analysis of OpenTofu templates to spot potential security issues.
+  require_serial: true
+  entry: hooks/tofu_trivy.sh
+  files: \.(tf|tofu)(vars)?$
+  language: script
+
+- id: checkov
+  name: checkov (deprecated, use "tofu_checkov")
+  description: Runs checkov on OpenTofu templates.
+  entry: checkov -d .
+  language: python
+  pass_filenames: false
+  always_run: false
+  files: \.tf$
+  exclude: \.terraform\/.*$
+  require_serial: true
+
+- id: tofu_checkov
+  name: Checkov
+  description: Runs checkov on OpenTofu templates.
+  entry: hooks/tofu_checkov.sh
+  language: script
+  always_run: false
+  files: \.(tf|tofu)$
+  exclude: \.terraform\/.*$
+  require_serial: true
+
+- id: tofu_wrapper_module_for_each
+  name: OpenTofu wrapper with for_each in module
+  description: Generate OpenTofu wrappers with for_each in module.
+  entry: hooks/tofu_wrapper_module_for_each.sh
+  language: script
+  pass_filenames: false
+  always_run: false
+  require_serial: true
+  files: \.tf$
+  exclude: \.terraform\/.*$
+
+- id: terrascan
+  name: terrascan
+  description: Runs terrascan on OpenTofu templates.
+  language: script
+  entry: hooks/terrascan.sh
+  files: \.(tf|tofu)$
+  exclude: \.terraform\/.*$
+  require_serial: true
+
+- id: tfupdate
+  name: tfupdate
+  description: Runs tfupdate on OpenTofu templates.
+  language: script
+  entry: hooks/tfupdate.sh
+  args:
+    - --args=terraform
+  files: \.(tf|tofu)$
+  require_serial: true

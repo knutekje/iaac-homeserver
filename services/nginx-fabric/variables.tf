@@ -1,14 +1,14 @@
-variable "namespace"{
-  type = string
+variable "namespace" {
+  type        = string
   description = "service namespace"
 }
 
-variable "chart_name"{
-  type = string
+variable "chart_name" {
+  type        = string
   description = "helm chart name"
 }
 
 variable "chart_version" {
-  type = string
+  type        = string
   description = "chart version"
 }

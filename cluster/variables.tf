@@ -9,5 +9,5 @@ variable "kubeconfig" {
 
 variable "context" {
   description = "k8s context"
-  type = string
+  type        = string
 }

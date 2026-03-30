@@ -18,9 +18,9 @@ locals {
 }
 
 module "nginx-fabric" {
-  source = "../services/nginx-fabric"
-  namespace = kubernetes_namespace.ns["monitoring"].metadata[0].name
-  chart_name = "nginx-fabric"
+  source        = "../services/nginx-fabric"
+  namespace     = kubernetes_namespace.ns["monitoring"].metadata[0].name
+  chart_name    = "nginx-fabric"
   chart_version = local.chart_versions["nginx-fabric"]
 
 }
